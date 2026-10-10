@@ -1,0 +1,30 @@
+name: Scout content checks
+on:
+  push:
+    paths:
+      - 'scout/**'
+      - 'frontend/scout-*'
+      - 'frontend/index.html'
+      - 'docs/UPSTREAM_README.md'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'scout/**'
+      - 'frontend/scout-*'
+      - 'frontend/index.html'
+      - 'docs/UPSTREAM_README.md'
+      - '.github/workflows/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  content:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scout/verify.py
+      - run: python scout/audit_snapshot.py
